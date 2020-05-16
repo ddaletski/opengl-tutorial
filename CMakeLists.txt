@@ -21,15 +21,22 @@ add_library(common STATIC ${COMMON_SRC})
 set(GLAD_SRC ${3RD_DIR}/glad/glad.c)
 add_library(glad STATIC ${GLAD_SRC})
 
+file(GLOB STB_SRC ${3RD_DIR}/stb/*.cpp)
+add_library(stb STATIC ${STB_SRC})
+
 find_package(glfw3 3.3 REQUIRED)
 set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL REQUIRED)
 
-include(${CMAKE_DIR}/gamut.cmake)
+include(${CMAKE_DIR}/gamutTexture.cmake)
 
 
-add_custom_target(copyShaders ALL
+add_custom_target(copyData ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${SRC_DIR}/shaders
         ${CMAKE_CURRENT_BINARY_DIR}/shaders
+
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_LIST_DIR}/textures
+        ${CMAKE_CURRENT_BINARY_DIR}/textures
 )

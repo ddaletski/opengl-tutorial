@@ -17,7 +17,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
         vShaderFile.open(vertexPath);
         fShaderFile.open(fragmentPath);
 
-        Shader(vShaderFile, fShaderFile);
+        *this = Shader(vShaderFile, fShaderFile);
 
         vShaderFile.close();
         fShaderFile.close();
