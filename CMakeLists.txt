@@ -29,6 +29,7 @@ set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL REQUIRED)
 
 include(${CMAKE_DIR}/gamutTexture.cmake)
+include(${CMAKE_DIR}/lut3d.cmake)
 
 
 add_custom_target(copyData ALL

@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 
 #include "common/common.h"
-#include <stb/stb_image.h>
 
 #include <iostream>
 #include <cmath>
@@ -12,27 +11,6 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-
-struct Image {
-    std::vector<uchar> data;
-    int width;
-    int height;
-    int channels;
-
-    Image(const std::string& imgPath) {
-        stbi_set_flip_vertically_on_load(true);
-
-        uchar* imgData = stbi_load(imgPath.c_str(), &width, &height, &channels, 0); 
-        if(imgData == nullptr) {
-            std::ostringstream ss;
-            ss << "can't load image from file " << imgPath;
-            throw std::runtime_error(ss.str());
-        }
-
-        data.resize(width * height * channels);
-        std::move(imgData, imgData + data.size(), data.data());
-    }
-};
 
 
 // settings
@@ -55,9 +33,13 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    // glfw window creation
-    // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    Image textureImage1("textures/1.jpg");
+    Image textureImage2("textures/2.jpg");
+
+    float scale = 800.0 / std::max(textureImage1.width, textureImage1.height);
+
+    GLFWwindow* window = glfwCreateWindow(scale * textureImage1.width, scale * textureImage1.height, "LearnOpenGL", NULL, NULL);
+
     if (window == NULL)
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -94,9 +76,6 @@ int main()
         0, 1, 2,   // first triangle
         1, 2, 3    // second triangle
     };  
-
-    Image textureImage1("textures/1.jpg");
-    Image textureImage2("textures/2.jpg");
 
     unsigned int texture1, texture2;
     glGenTextures(1, &texture1);
